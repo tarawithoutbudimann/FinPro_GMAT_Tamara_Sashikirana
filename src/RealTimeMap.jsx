@@ -46,7 +46,7 @@ const RealTimeMap = () => {
         <MapContainer 
           center={[-7.765317, 110.371216]} 
           zoom={13} 
-          style={{ height: '500px' }}
+          style={{ height: 400 , width : 700}}
           whenCreated={map => mapRef.current = map}
         >
           <TileLayer
@@ -71,5 +71,6 @@ const RealTimeMap = () => {
 };
 
 export default RealTimeMap;
+
 
 

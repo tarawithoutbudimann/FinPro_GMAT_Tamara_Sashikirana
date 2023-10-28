@@ -3,7 +3,7 @@ import Plot from 'react-plotly.js';
 import { io } from "socket.io-client";
 import 'tailwindcss/tailwind.css'; 
 
-const GyroscopeChart = () => {
+const PressureChart = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -16,12 +16,9 @@ const GyroscopeChart = () => {
     socket.on("message", (mess) => {
       console.log(mess);
       const dataArray = mess.split(',');
-      const Yaw = parseFloat(dataArray[2]);
-      const Pitch = parseFloat(dataArray[3]);
-      const Roll = parseFloat(dataArray[4]);
-      const Clock = dataArray[1];
-      
-      setData(prevData => [...prevData, { Yaw, Pitch, Roll, Clock }]);
+      const Pressure = parseFloat(dataArray[8]);
+      const Clock = dataArray[1]; // Use the provided clock data
+      setData(prevData => [...prevData, { Pressure, Clock }]);
     });
 
     return () => {
@@ -42,22 +39,18 @@ const GyroscopeChart = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Memisahkan data untuk visualisasi
+  // Separate data for visualization
   const xData = data.map(item => item.Clock);
-  const yawData = data.map(item => item.Yaw);
-  const pitchData = data.map(item => item.Pitch);
-  const rollData = data.map(item => item.Roll);
+  const PressureData = data.map(item => item.Pressure);
 
   return (
     <Plot
       data={[
-        { type: 'scatter', mode: 'lines', name: 'Yaw', x: xData, y: yawData, marker: { color: 'red' } },
-        { type: 'scatter', mode: 'lines', name: 'Pitch', x: xData, y: pitchData, marker: { color: 'green' } },
-        { type: 'scatter', mode: 'lines', name: 'Roll', x: xData, y: rollData, marker: { color: 'blue' } },
+        { type: 'scatter', mode: 'lines', name: 'Pressure', x: xData, y: PressureData, marker: { color: 'blue' } },
       ]}
-      layout={{ width: 700, height: 400, title: 'Gyroscope' }}
+      layout={{ width: 450, height: 300, title: 'Graph Pressure' }}
     />
   );
 };
 
-export default GyroscopeChart;
+export default PressureChart;
